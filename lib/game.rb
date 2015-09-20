@@ -3,6 +3,7 @@ class Game
   attr_reader :options, :result, :player1, :player2, :score1, :score2
 
   def initialize
+    @game_id = {}
     @result = {rock: 'scissors', scissors: 'paper', paper: 'rock'}
     @player1 = nil
     @player2 = nil
@@ -18,12 +19,20 @@ class Game
   end
 
   def winner
-    return "No winner!" if (player1.choice == player2.choice)
-    (@result[player1.choice.to_sym] == player2.choice) ? player1.win : player2.win
+    if (player1.choice && player2.choice)
+      return "No winner!" if (player1.choice == player2.choice)
+      (@result[player1.choice.to_sym] == player2.choice) ? "The winner is #{player1.win}" : "The winner is #{player2.win}"
+    else
+      "Refresh in a moment"
+    end
   end
 
   def score
-    "#{player1.score} : #{player2.score}"
+    if (player1.choice && player2.choice)
+      "The final score is #{player1.score} : #{player2.score}"
+    else
+      "Refresh in a moment"
+    end
   end
 
   private

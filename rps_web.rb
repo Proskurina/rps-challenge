@@ -7,34 +7,46 @@ class RpsChallenge < Sinatra::Base
 
   enable :sessions
 
+  $game = Game.new
+
   get '/' do
     erb :index
   end
 
   post '/' do
-    session[:game] = Game.new
-    session[:game].add_player(Player.new (params[:name]))
-    session[:game].add_player(Computer.new)
+
+    $game.add_player(Player.new(session[:session_id], params[:name]))
+    p $game
     redirect '/new_game'
   end
 
   get '/new_game' do
-    @name = session[:game].player1.name
+    (@name = $game.player1.name) if ($game.player1.id == session[:session_id])
+    (@name = $game.player2.name) if ($game.player2 && $game.player2.id == session[:session_id])
+    p $game
     erb :new_game
   end
 
   post '/result' do
-    session[:game].player1.choice = params[:rps]
-    session[:game].player2.choice = session[:game].computer_choice
+    ($game.player1.choice = params[:rps]) if ($game.player1.id == session[:session_id])
+    ($game.player2.choice = params[:rps]) if ($game.player2 && $game.player2.id == session[:session_id])
     redirect '/result'
   end
 
   get '/result' do
-    @player_choice = session[:game].player1.choice
-    @computer_choice = session[:game].player2.choice
-    @winner = session[:game].winner
-    @score = session[:game].score
+    @player1 = $game.player1.name
+    @player2 = $game.player2.name
+    @player1_choice = $game.player1.choice
+    @player2_choice = $game.player2.choice
+    @winner = $game.winner
+    @score = $game.score
     erb :result
+  end
+
+  post '/clear_all' do
+    $game.player1.choice = nil
+    $game.player2.choice = nil
+    redirect '/new_game'
   end
 
   get '/exit' do

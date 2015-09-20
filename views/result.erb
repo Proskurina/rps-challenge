@@ -1,12 +1,12 @@
-Your choice is <%=@player_choice%> <br>
+<%=@player1%> choice is <%=@player1_choice%> <br>
 
-Computer's choice is <%=@computer_choice%><br>
+<%=@player2%>  choice is <%=@player2_choice%><br>
 
-And the winner is ... <%=@winner%> <br>
+<%=@winner%> <br>
 
-Final score is <%=@score%> <br>
+<%=@score%> <br>
 
-  <form action="/new_game">
+  <form action="/clear_all" method="post">
     <input type="submit" value="Play again">
   </form>
 
