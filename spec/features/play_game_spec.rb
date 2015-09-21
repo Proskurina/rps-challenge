@@ -14,6 +14,7 @@ feature 'Play the game' do
   end
 
   scenario 'after I entered my name I am welcomed and asked to make my choice' do
+    $game.add_player(Player.new('Mike'))
     visit '/'
     fill_in('name', with: 'John')
     click_button('submit')
@@ -38,6 +39,7 @@ feature 'Play the game' do
     visit '/'
     fill_in('name', with: 'John')
     click_button('submit')
+    $game.player1.choice= 'scissors'
     find("option[value='rock']").click
     click_button('Play!')
     expect(page).to have_content('Your choice is rock')
